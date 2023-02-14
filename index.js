@@ -99,7 +99,7 @@ app.post("/user/login", async (req, res) => {
         };
         const token = jwt.sign(payload, secret_key, { expiresIn: "23h" });
         console.log(token);
-        return res.status(200).json({ message: "ログイン成功", token: token });
+        return res.status(200).json({ message: "Login Success", token: token });
       } else {
         return res.status(400).json({ message: "Password is incorrect" });
       }
