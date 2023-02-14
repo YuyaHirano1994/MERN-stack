@@ -15,9 +15,10 @@ app.post("/item/create", auth, async (req, res) => {
   try {
     await connectDB();
     await ItemModel.create(req.body);
-    return res.status(200).json({ message: "Create SUCCESS!!" });
+    return res.status(200).json({ message: "Success create Item" });
   } catch (error) {
-    return res.status(400).json({ message: "Failed create Item..." });
+    console.log(error);
+    return res.status(400).json({ message: "Success create Item" });
   }
 });
 
@@ -47,7 +48,7 @@ app.put("/item/update/:id", auth, async (req, res) => {
   try {
     await connectDB();
     const singleItem = await ItemModel.findById(req.params.id);
-    if (singleItem === req.body.email) {
+    if (singleItem.email === req.body.email) {
       await ItemModel.updateOne({ _id: req.params.id }, req.body);
       return res.status(200).json({ message: "Success Edit Item" });
     } else {
@@ -62,7 +63,7 @@ app.delete("/item/delete/:id", auth, async (req, res) => {
   try {
     await connectDB();
     const singleItem = await ItemModel.findById(req.params.id);
-    if (singleItem === req.body.email) {
+    if (singleItem.email === req.body.email) {
       await ItemModel.deleteOne({ _id: req.params.id });
       return res.status(200).json({ message: "Delete Item Success" });
     } else {
@@ -78,10 +79,11 @@ app.delete("/item/delete/:id", auth, async (req, res) => {
 app.post("/user/register", async (req, res) => {
   try {
     await connectDB();
+    console.log(req.body);
     await UserModel.create(req.body);
     return res.status(200).json({ message: "Create User SUCCESS!!" });
   } catch (error) {
-    return res.status(400).json({ message: "Failed create Item..." });
+    return res.status(400).json({ message: "Failed create User..." });
   }
 });
 // Login User
@@ -96,8 +98,7 @@ app.post("/user/login", async (req, res) => {
           email: req.body.email,
         };
         const token = jwt.sign(payload, secret_key, { expiresIn: "23h" });
-        console.log(`token: ${token}`);
-        return res.status(200).json({ message: "Login User SUCCESS!!" });
+        return res.status(200).json({ message: "Login SUCCESS!!", token: token });
       } else {
         return res.status(400).json({ message: "Password is incorrect" });
       }
@@ -105,7 +106,7 @@ app.post("/user/login", async (req, res) => {
       return res.status(400).json({ message: "Cannot find User" });
     }
   } catch (error) {
-    return res.status(400).json({ message: "Login User Failed!!" });
+    return res.status(400).json({ message: "Login Failed!!" });
   }
 });
 
