@@ -91,14 +91,15 @@ const secret_key = "mern-stack";
 app.post("/user/login", async (req, res) => {
   try {
     await connectDB();
-    const saveUserData = await UserModel.findOne({ email: req.body.email });
-    if (saveUserData) {
-      if (req.body.password === saveUserData.password) {
+    const savedUserData = await UserModel.findOne({ email: req.body.email });
+    if (savedUserData) {
+      if (req.body.password === savedUserData.password) {
         const payload = {
           email: req.body.email,
         };
         const token = jwt.sign(payload, secret_key, { expiresIn: "23h" });
-        return res.status(200).json({ message: "Login SUCCESS!!", token: token });
+        console.log(token);
+        return res.status(200).json({ message: "ログイン成功", token: token });
       } else {
         return res.status(400).json({ message: "Password is incorrect" });
       }
